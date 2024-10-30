@@ -1,0 +1,12 @@
+[api]
+host = "127.0.0.1"
+port = 8000
+debug = true
+
+[database]
+# Will be implemented later
+url = "sqlite:///./byocruda.db"
+
+[auth]
+# Will be implemented later
+secret_key = ""
