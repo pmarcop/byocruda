@@ -2,11 +2,20 @@
 host = "127.0.0.1"
 port = 8000
 debug = true
+prefix = "/api/v1"
+project_name = "BYOCRUDA"
+description = "Build Your Own CRUD Application"
+version = "0.1.0"
 
 [database]
-# Will be implemented later
 url = "sqlite:///./byocruda.db"
+echo = true
 
-[auth]
-# Will be implemented later
-secret_key = ""
+[security]
+secret_key = "your-secret-key-here"  # Change this in production
+algorithm = "HS256"
+access_token_expire_minutes = 30
+
+[logging]
+level = "INFO"
+format = "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
