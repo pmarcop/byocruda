@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 
 from byocruda.core.config import settings
+from byocruda.core.logging import log
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,15 +14,15 @@ async def lifespan(app: FastAPI):
     Handles startup and shutdown events.
     """
     # Startup operations
-    print(f"Starting {settings.api.project_name} API...")
-    print(f"Debug mode: {settings.api.debug}")
+    log.info(f"Starting {settings.api.project_name} API...")
+    log.debug(f"Debug mode: {settings.api.debug}")
     # Here we'll later add:
     # - Database connection
     # - Cache initialization
     # - Background tasks startup
     yield
     # Shutdown operations
-    print("Shutting down API...")
+    log.info("Shutting down API...")
     # Here we'll later add:
     # - Database connection closure
     # - Cache cleanup
@@ -53,7 +54,8 @@ def create_application() -> FastAPI:
 
     # Add exception handlers
     @app.exception_handler(HTTPException)
-    async def http_exception_handler(request, exc):
+    async def http_exception_handler(request: Request, exc: HTTPException):
+        log.error(f"HTTP error occurred: {exc.status_code} - {exc.detail}")
         return JSONResponse(
             status_code=exc.status_code,
             content={
@@ -65,7 +67,8 @@ def create_application() -> FastAPI:
         )
 
     @app.exception_handler(Exception)
-    async def general_exception_handler(request, exc):
+    async def general_exception_handler(request: Request, exc: Exception):
+        log.exception(f"Unexpected error occurred: {str(exc)}")
         return JSONResponse(
             status_code=500,
             content={
@@ -81,6 +84,7 @@ def create_application() -> FastAPI:
     @app.get("/", response_model=Dict[str, Any])
     async def root():
         """Root endpoint returning basic API information."""
+        log.info("Root endpoint accessed")
         return {
             "message": f"Welcome to {settings.api.project_name} API",
             "version": settings.api.version,
@@ -92,6 +96,7 @@ def create_application() -> FastAPI:
     @app.get("/health", response_model=Dict[str, Any])
     async def health_check():
         """Health check endpoint for monitoring."""
+        log.debug("Health check performed")
         return {
             "status": "healthy",
             "version": settings.api.version,
@@ -108,6 +113,7 @@ app = create_application()
 
 if __name__ == "__main__":
     import uvicorn
+    log.info(f"Starting server on {settings.api.host}:{settings.api.port}")
     uvicorn.run(
         "main:app",
         host=settings.api.host,

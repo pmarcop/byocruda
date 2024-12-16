@@ -13,6 +13,9 @@ def test_load_config():
     assert settings.database.url == "sqlite:///./byocruda.db"
     assert settings.security.algorithm == "HS256"
     assert settings.logging.level == "INFO"
+    assert settings.logging.file_path == "logs/byocruda.log"
+    assert settings.logging.rotation == "500 MB"
+    assert settings.logging.retention == "10 days"
 
 def test_invalid_config_path():
     """Test handling of invalid config file path."""

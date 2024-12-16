@@ -19,3 +19,6 @@ access_token_expire_minutes = 30
 [logging]
 level = "INFO"
 format = "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+file_path = "logs/byocruda.log"
+rotation = "500 MB"
+retention = "10 days"

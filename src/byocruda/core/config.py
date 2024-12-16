@@ -25,6 +25,9 @@ class SecuritySettings(BaseModel):
 class LoggingSettings(BaseModel):
     level: str
     format: str
+    file_path: str
+    rotation: str
+    retention: str
 
 class Settings(BaseSettings):
     api: APISettings

@@ -41,6 +41,8 @@ build-backend = "pdm.backend"
 test = [
     "pytest>=7.4.3",
     "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.2",
+    "pytest-mock>=3.12.0",
 ]
 
 [tool.pytest.ini_options]
