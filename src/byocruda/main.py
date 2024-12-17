@@ -1,11 +1,14 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from typing import Dict, Any
+from sqlalchemy.orm import Session
 
 from byocruda.core.config import settings
 from byocruda.core.logging import log
+from byocruda.core.database import init_db, get_db
+from byocruda.models import models  # This imports all models for registration
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,7 +20,12 @@ async def lifespan(app: FastAPI):
     log.info(f"Starting {settings.api.project_name} API...")
     log.debug(f"Debug mode: {settings.api.debug}")
     # Here we'll later add:
-    # - Database connection
+    # Initialize database
+    try:
+        init_db()
+    except Exception as e:
+        log.error(f"Failed to initialize database: {str(e)}")
+        raise
     # - Cache initialization
     # - Background tasks startup
     yield
@@ -105,7 +113,35 @@ def create_application() -> FastAPI:
                 "debug": settings.api.debug
             }
         }
-
+    # Add a test database endpoint
+    @app.get("/db-test")
+    async def test_db(db: Session = Depends(get_db)):
+        """Test database connection."""
+        try:
+            # Try to create a test user
+            test_user = models.User(
+                username="test_user",
+                email="test@example.com",
+                full_name="Test User"
+            )
+            db.add(test_user)
+            db.commit()
+            db.refresh(test_user)
+            
+            return {
+                "message": "Database connection successful",
+                "test_user": {
+                    "id": test_user.id,
+                    "username": test_user.username,
+                    "email": test_user.email
+                }
+            }
+        except Exception as e:
+            log.error(f"Database test failed: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail="Database connection test failed"
+            )
     return app
 
 # Create the application instance
