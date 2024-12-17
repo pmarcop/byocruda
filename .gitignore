@@ -162,6 +162,7 @@ cython_debug/
 #.idea/
 
 # specific to this project
+./*.db
 ./logs/*
 ./config/*
 !./config/config.toml
