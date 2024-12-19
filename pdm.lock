@@ -5,7 +5,7 @@
 groups = ["default", "dev", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:1b037fa9e16f5fe8cacc387c81fee8767bab091155d49585c44541cc95c475af"
+content_hash = "sha256:3cdba5a7ca86e60a4a09633f51ea6cc844a11b3a6f5fd812e95c27cbf996b27c"
 
 [[metadata.targets]]
 requires_python = ">=3.12"
@@ -431,22 +431,6 @@ files = [
 ]
 
 [[package]]
-name = "inflect"
-version = "7.4.0"
-requires_python = ">=3.8"
-summary = "Correctly generate plurals, singular nouns, ordinals, indefinite articles"
-groups = ["default"]
-dependencies = [
-    "more-itertools>=8.5.0",
-    "typeguard>=4.0.1",
-    "typing-extensions; python_version < \"3.9\"",
-]
-files = [
-    {file = "inflect-7.4.0-py3-none-any.whl", hash = "sha256:85af0997ee2bda942b1c1eed8c8a827abda91aa3e22d1efaa0eea817f9350ce7"},
-    {file = "inflect-7.4.0.tar.gz", hash = "sha256:904baa17cc2cb74827a6c27b95692e95670dadc72b208b3e8c1c05aeed47026b"},
-]
-
-[[package]]
 name = "iniconfig"
 version = "2.0.0"
 requires_python = ">=3.7"
@@ -506,17 +490,6 @@ groups = ["dev"]
 files = [
     {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
     {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
-]
-
-[[package]]
-name = "more-itertools"
-version = "10.5.0"
-requires_python = ">=3.8"
-summary = "More routines for operating on iterables, beyond itertools"
-groups = ["default"]
-files = [
-    {file = "more-itertools-10.5.0.tar.gz", hash = "sha256:5482bfef7849c25dc3c6dd53a6173ae4795da2a41a80faea6700d9f5846c5da6"},
-    {file = "more_itertools-10.5.0-py3-none-any.whl", hash = "sha256:037b0d3203ce90cca8ab1defbbdac29d5f993fc20131f3664dc8d6acfa872aef"},
 ]
 
 [[package]]
@@ -893,22 +866,6 @@ files = [
 ]
 
 [[package]]
-name = "sqlacodegen-v2"
-version = "0.1.4"
-requires_python = ">=3.7"
-summary = "Automatic model code generator for SQLAlchemy 2.0"
-groups = ["default"]
-dependencies = [
-    "SQLAlchemy>=2.0",
-    "importlib-metadata; python_version < \"3.10\"",
-    "inflect>=4.0.0",
-]
-files = [
-    {file = "sqlacodegen_v2-0.1.4-py3-none-any.whl", hash = "sha256:de6bbd548a8cee221fa8870f0710c9154f0d82e388ba4f092d294fd06eed47ed"},
-    {file = "sqlacodegen_v2-0.1.4.tar.gz", hash = "sha256:11dca99a23634bc7c3a8b3f8a491203f670810fc8250448ef6ef6a6b5a3bacc1"},
-]
-
-[[package]]
 name = "sqlalchemy"
 version = "2.0.36"
 requires_python = ">=3.7"
@@ -984,21 +941,6 @@ files = [
     {file = "tomli-2.2.1-cp313-cp313-win_amd64.whl", hash = "sha256:a38aa0308e754b0e3c67e344754dff64999ff9b513e691d0e786265c93583c69"},
     {file = "tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc"},
     {file = "tomli-2.2.1.tar.gz", hash = "sha256:cd45e1dc79c835ce60f7404ec8119f2eb06d38b1deba146f07ced3bbc44505ff"},
-]
-
-[[package]]
-name = "typeguard"
-version = "4.4.1"
-requires_python = ">=3.9"
-summary = "Run-time type checker for Python"
-groups = ["default"]
-dependencies = [
-    "importlib-metadata>=3.6; python_version < \"3.10\"",
-    "typing-extensions>=4.10.0",
-]
-files = [
-    {file = "typeguard-4.4.1-py3-none-any.whl", hash = "sha256:9324ec07a27ec67fc54a9c063020ca4c0ae6abad5e9f0f9804ca59aee68c6e21"},
-    {file = "typeguard-4.4.1.tar.gz", hash = "sha256:0d22a89d00b453b47c49875f42b6601b961757541a2e1e0ef517b6e24213c21b"},
 ]
 
 [[package]]
