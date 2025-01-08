@@ -6,13 +6,19 @@ from sqlmodel import Field, Relationship, SQLModel
 from datetime import datetime, timezone
 from sqlalchemy import UniqueConstraint
 
-class WorkstationType(SQLModel, table=True):
+class WorkstationTypeBase(SQLModel):
     __tablename__ = 'workstation_types'
+    workstation_type: str = Field(unique=True)
 
-    workstation_type_id: int = Field(primary_key=True)
-    type: str = Field(unique=True)
-
+class WorkstationType(WorkstationTypeBase, table=True):
+    workstation_type_id: int | None = Field(primary_key=True, default=None)
     workstations: List['Workstation'] = Relationship(back_populates='workstation_type', passive_deletes="all")
+
+class WorkstationTypePublic(WorkstationTypeBase):
+    workstation_type_id: int
+
+class WorkstationTypeCreate(WorkstationTypeBase):
+    pass
 
 
 # class WorkstationBase(SQLModel):
@@ -34,13 +40,13 @@ class WorkstationBase(SQLModel):
     type_id: int = Field(foreign_key='workstation_types.workstation_type_id', ondelete='RESTRICT')
     user_id: int = Field(foreign_key='users.user_id', ondelete='RESTRICT')
     department_id: int = Field(foreign_key='departments.department_id', ondelete='RESTRICT')
-    # date_of_arrival: Optional[str] = Field(default_factory=lambda: f"{datetime.now().date()}")
-    # video_ram_gb: int | None = None
-    # system_ram_gb: int | None = None
-    # total_storage_tb: int | None = None
-    # hardware_description: Optional[str] = None
-    # reserved: str | None = None
-    # notes: str | None = None
+    date_of_arrival: Optional[str] = Field(default_factory=lambda: f"{datetime.now().date()}")
+    video_ram_gb: int | None = None
+    system_ram_gb: int | None = None
+    total_storage_tb: int | None = None
+    hardware_description: Optional[str] = None
+    reserved: str | None = None
+    notes: str | None = None
 
     
 class Workstation(WorkstationBase, table=True):
