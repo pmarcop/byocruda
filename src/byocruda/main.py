@@ -7,9 +7,15 @@ from sqlalchemy.orm import Session
 
 from byocruda.core.config import settings
 from byocruda.core.logging import log
-from byocruda.core.database import init_db, get_db, cleanup_db
-#from byocruda.models import models  # This imports all models for registration
+from byocruda.core.database import init_db, get_db_session, cleanup_db
 
+# from byocruda.models.departments import Department, DepartmentBase, DepartmentCreate, DepartmentPublic
+
+from byocruda.api.v1.endpoints.endpoints import (
+    users_router, 
+    departments_router,
+    workstations_router
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,7 +32,6 @@ async def lifespan(app: FastAPI):
         # Initialize database
         init_db()
         log.info("Database initialized successfully")
-        
         yield
         
     except Exception as e:
@@ -117,6 +122,18 @@ def create_application() -> FastAPI:
                 "debug": settings.api.debug
             }
         }
+    app.include_router(
+        departments_router,
+        prefix="/api/v1/departments"
+    )
+    app.include_router(
+        users_router,
+        prefix="/api/v1/users"
+    )
+    app.include_router(
+        workstations_router,
+        prefix="/api/v1/workstations"
+    )
     return app
 
 # Create the application instance
