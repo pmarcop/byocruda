@@ -17,10 +17,30 @@ class DatabaseSettings(BaseModel):
     url: str
     echo: bool
 
-class SecuritySettings(BaseModel):
-    secret_key: str
-    algorithm: str
+class SecuritySettingsDatabase(BaseModel):
+    secret_key_env_variable: str
+    crypt_algorithm: str
+
+class SecuritySettingsApi(BaseModel):
+    signing_algorithm: str
     access_token_expire_minutes: int
+
+class SecuritySettingsLdap(BaseModel):
+    ldap_uri: str
+    ldap_bind_user: str
+    ldap_base: str
+    ldap_filter: str
+
+class SecuritySettings(BaseModel):
+    database_enable: bool
+    ldap_enable: bool
+    api_enable: bool
+    https_enable: bool
+    database: SecuritySettingsDatabase
+    ldap: SecuritySettingsLdap
+    api: SecuritySettingsApi
+
+
 
 class LoggingSettings(BaseModel):
     level: str

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from os import getenv
 
 from sqlalchemy import event
 from sqlalchemy.pool import QueuePool
@@ -16,13 +17,11 @@ from byocruda.core.logging import log
 
 from byocruda.models import models
 
-# Enable foreign key enforcement for SQLite
-@event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    if isinstance(dbapi_connection, SQLite3Connection):
-        cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
-        cursor.close()
+# secure_db_url = ""
+# if settings.security.database_enable:
+#     enc_key = getenv(settings.security.database.secret_key_env_variable)
+#     enc_algorithm = settings.security.database.crypt_algorithm
+#     secure_db_url = f"?cipher={enc_algorithm}&key={enc_key}"
 
 # Custom MetaData instance with naming convention for constraints
 convention = {
@@ -40,8 +39,8 @@ def create_db_engine():
     """Create database engine with proper configuration."""
     connect_args = {"check_same_thread": False} if settings.database.url.startswith('sqlite') else {}
     
-    return create_engine(
-        settings.database.url,
+    return create_engine(        
+        url=settings.database.url,
         echo=settings.database.echo,
         connect_args=connect_args,
         poolclass=QueuePool,
@@ -53,6 +52,21 @@ def create_db_engine():
 
 # Create engine with connection pooling
 engine = create_db_engine()
+
+# Enable foreign key enforcement for SQLite
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    if isinstance(dbapi_connection, SQLite3Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        # if settings.security.database_enable:
+        #     cursor.execute("PRAGMA cipher_compatibility = 4")
+        #     cursor.execute(f"PRAGMA key = '{enc_key}'")
+        #     cursor.execute("PRAGMA cipher_page_size = 4096")
+        #     cursor.execute("PRAGMA kdf_iter = 64000")
+        #     cursor.execute("PRAGMA cipher_use_hmac = ON")
+        cursor.close()
+    
 
 # Create sessionmaker
 SessionLocal = sessionmaker(

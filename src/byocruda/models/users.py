@@ -14,7 +14,7 @@ class UserBase(SQLModel):
     )
     __tablename__ = 'users'
     userDN: str = Field(unique=True, index=True, schema_extra={'examples': ['a123z']})
-    name: str = Field(nullable=False)
+    name: str = Field(nullable=False, index=True)
     department_id: int = Field(foreign_key='departments.department_id', ondelete='RESTRICT')
     notes: Optional[str] = Field(default=None)
     status: Optional[int] = Field(default=1)

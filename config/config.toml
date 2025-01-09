@@ -9,15 +9,30 @@ version = "0.1.0"
 
 [database]
 url = "sqlite:///./byocruda.db"
-echo = true
+echo = false
 
 [security]
-secret_key = "your-secret-key-here"  # Change this in production
-algorithm = "HS256"
+database_enable = false
+ldap_enable = false
+api_enable = true
+https_enable = false
+
+[security.database]
+secret_key_env_variable = "BYOCRUDA_SECRET_KEY" 
+crypt_algorithm = "aes-256-cfb"
+
+[security.ldap]
+ldap_uri = ""
+ldap_bind_user = ""
+ldap_base = ""
+ldap_filter = ""
+
+[security.api]
+signing_algorithm = "HS256"
 access_token_expire_minutes = 30
 
 [logging]
-level = "INFO"
+level = "DEBUG"
 format = "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
 file_path = "logs/byocruda.log"
 rotation = "500 MB"

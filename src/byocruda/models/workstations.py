@@ -21,29 +21,16 @@ class WorkstationTypeCreate(WorkstationTypeBase):
     pass
 
 
-# class WorkstationBase(SQLModel):
-#     hostname: str = Field(nullable=False, unique=True)
-#     type_id: int = Field(foreign_key='workstation_types.workstation_type_id', ondelete='RESTRICT')
-#     user_id: int = Field(foreign_key='users.user_id', ondelete='RESTRICT')
-#     department_id: int = Field(foreign_key='departments.department_id', ondelete='RESTRICT')
-#     date_of_arrival: Optional[str] = Field(default_factory=lambda: f"{datetime.now().date()}")
-#     video_ram_gb: int | None = None
-#     system_ram_gb: int | None = None
-#     total_storage_tb: int | None = None
-#     hardware_description: Optional[str] = None
-#     reserved: str | None = None
-#     notes: str | None = None
-
 class WorkstationBase(SQLModel):
-    __tablename__ = 'workstation'
-    hostname: str = Field(unique=True)
-    type_id: int = Field(foreign_key='workstation_types.workstation_type_id', ondelete='RESTRICT')
-    user_id: int = Field(foreign_key='users.user_id', ondelete='RESTRICT')
-    department_id: int = Field(foreign_key='departments.department_id', ondelete='RESTRICT')
+    __tablename__ = 'workstations'
+    hostname: str = Field(unique=True, index=True)
+    type_id: int = Field(foreign_key='workstation_types.workstation_type_id', ondelete='RESTRICT', index=True)
+    user_id: int = Field(foreign_key='users.user_id', ondelete='RESTRICT', index=True)
+    department_id: int = Field(foreign_key='departments.department_id', ondelete='RESTRICT', index= True)
     date_of_arrival: Optional[str] = Field(default_factory=lambda: f"{datetime.now().date()}")
-    video_ram_gb: int | None = None
+    video_ram_gb: int | None = Field(default=None, index=True)
     system_ram_gb: int | None = None
-    total_storage_tb: int | None = None
+    total_storage_tb: float | None = None
     hardware_description: Optional[str] = None
     reserved: str | None = None
     notes: str | None = None
@@ -65,9 +52,9 @@ class WorkstationUpdate(SQLModel):
     type_id: int | None = None
     user_id: int | None = None
     department_id: int | None = None
-    # video_ram_gb: int | None = None
-    # system_ram_gb: int | None = None
-    # total_storage_tb: int | None = None
-    # hardware_description: Optional[str] = None
-    # reserved: str | None = None
-    # notes: str | None = None
+    video_ram_gb: int | None = None
+    system_ram_gb: int | None = None
+    total_storage_tb: float | None = None
+    hardware_description: Optional[str] = None
+    reserved: str | None = None
+    notes: str | None = None

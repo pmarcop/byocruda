@@ -12,6 +12,7 @@ from byocruda.models.models import (
     UserPublic, 
     UserCreate, 
     UserPublicWithDepartment,
+    UserPublicWithEverything,
     UserUpdate
 )
 
@@ -28,7 +29,7 @@ async def get_users(
     users=session.exec(select(User).offset(skip).limit(limit)).all()
     return users
 
-@router.get("/{user_id}", response_model=UserPublicWithDepartment)
+@router.get("/{user_id}", response_model=UserPublicWithEverything)
 async def get_user(
     *,
     user_id: int,

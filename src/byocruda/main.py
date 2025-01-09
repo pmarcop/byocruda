@@ -1,9 +1,12 @@
+from random import choice
+
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from typing import Dict, Any
-from sqlalchemy.orm import Session
+# from sqlalchemy.orm import Session
+from sqlmodel import Session, delete, select
 
 from byocruda.core.config import settings
 from byocruda.core.logging import log
@@ -31,6 +34,8 @@ async def lifespan(app: FastAPI):
     try:
         # Initialize database
         init_db()
+        if settings.api.debug:
+            app_debug()
         log.info("Database initialized successfully")
         yield
         
@@ -138,6 +143,48 @@ def create_application() -> FastAPI:
 
 # Create the application instance
 app = create_application()
+
+if settings.api.debug:
+    from .models.models import *
+    def app_debug():
+        session: Session = next(get_db_session())
+        for table in [Workstation, WorkstationType, User, Department]:
+            statement=delete(table)
+            session.exec(statement)
+    
+        workstation_types_range = range(1,5)
+        department_range = range(1,4)
+        user_range = range(1,31)
+        workstation_range = range(1,60)
+    
+        for workstation_type_id in workstation_types_range:
+                # session: Session = next(get_db_session())
+                session.add(WorkstationType(workstation_type=f"Type{workstation_type_id}"))
+                # session.commit()
+                # session.close()
+        for department_index in department_range:
+            # session: Session = next(get_db_session())
+            session.add(Department(name=f"department{department_index}"))
+            # session.commit()
+            # session.close()
+        for user_index in user_range:
+            department_id=choice(department_range)
+            # session: Session = next(get_db_session())
+            session.add(User(userDN=f"user{user_index}_department{department_id}", name=f"user{user_index}_{department_id}",department_id=department_id))
+            # session.commit()
+            # session.close()
+        for workstation_id in workstation_range:
+            department_id=choice(department_range)
+            user_id=choice(user_range)
+            type_id=choice(workstation_types_range)
+            # session: Session = next(get_db_session())
+            session.add(Workstation(hostname=f"Workstation_{workstation_id}", type_id=type_id, user_id=user_id, department_id=department_id))
+        session.commit()
+        session.close()
+    
+        
+        
+    
 
 if __name__ == "__main__":
     import uvicorn

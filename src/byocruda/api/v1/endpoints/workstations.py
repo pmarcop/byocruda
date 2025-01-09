@@ -1,11 +1,8 @@
-from fastapi import APIRouter, Request, Depends, HTTPException
-
 from typing import List, Optional, Annotated, TYPE_CHECKING
-
+from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlmodel import Session, select
 
 from byocruda.core.database import get_db_session
-
 from byocruda.models.models import (
     Workstation,
     WorkstationBase,
@@ -15,7 +12,8 @@ from byocruda.models.models import (
     WorkstationType,
     WorkstationTypePublic,
     WorkstationTypeBase,
-    WorkstationTypeCreate
+    WorkstationTypeCreate,
+    WorkstationPublicWithUserAndDepartment
 )
 
 router = APIRouter()
@@ -30,7 +28,7 @@ async def get_workstations(
     workstations = session.exec(select(Workstation).offset(skip).limit(limit)).all()
     return workstations
 
-@router.get("/{workstation_id}", response_model=WorkstationPublic)
+@router.get("/{workstation_id}", response_model=WorkstationPublicWithUserAndDepartment)
 async def get_workstation(
     *,
     session: Session = Depends(get_db_session),
@@ -84,17 +82,17 @@ async def get_workstation(
     session.refresh(db_workstation)
     return db_workstation
 
-@router.get("/types", response_model=List[WorkstationTypePublic])
+@router.get("/types/", response_model=List[WorkstationTypePublic])
 async def get_workstation_types(
     *,
     session : Session = Depends(get_db_session),
     offset: int = 0,
-    limit: int = 100,
+    limit: int = 100
 ):
     workstation_types=session.exec(select(WorkstationType).offset(offset).limit(limit)).all()
     return workstation_types
 
-@router.post("/types", response_model=WorkstationTypePublic)
+@router.post("/types/", response_model=WorkstationTypePublic)
 async def create_workstation_type(
     *,
     session: Session = Depends(get_db_session),
